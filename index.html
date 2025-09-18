@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Color Challenge Hard</title>
+<style>
+body { font-family: Arial; text-align:center; padding:50px; }
+img { max-width:300px; margin:20px; cursor:pointer; }
+button { padding:10px 20px; font-size:16px; cursor:pointer; }
+</style>
+</head>
+<body>
+<h1>Find the secret code!</h1>
+<p>Check the color carefully and enter the code:</p>
+
+<img src="/red-shade.jpg" alt="Red Shade" id="mainImage">
+<br>
+<button id="enterCode">Enter Code</button>
+
+<script>
+// RGB-derived code
+const R = 255, G = 0, B = 0;
+const step1 = (R*G)+B;
+const step2 = step1 ^ 123;
+const secretCode = (step2*7)%1000;
+
+document.getElementById("enterCode").addEventListener("click", async function(){
+    const userInput = prompt("Enter the secret code:");
+    if(Number(userInput) === secretCode){
+        // Fetch server-side API for flag (flag stored in ENV)
+        const res = await fetch(`/api/flag?code=${userInput}`);
+        const data = await res.json();
+        alert("flag unlocked: " + data.flag);
+    } else {
+        alert("Try again!");
+    }
+});
+
+// Optional: click image for subtle hint
+document.getElementById("mainImage").addEventListener("click", function(){
+    alert("Hint: Check the image properties for hidden info.");
+});
+</script>
+</body>
+</html>
